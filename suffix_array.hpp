@@ -33,6 +33,23 @@ vector<id_type> SuffixArray(It begin, It end) {
   }
 
   T max_c = *std::max_element(begin, end);
+  if (max_c/32 > n) {
+    // Character compression
+    vector<T> clone(n);
+    std::copy(begin, end, clone.begin());
+    clone.back() = 0;
+    sort(clone.begin(), clone.end());
+    clone.erase(unique(clone.begin(), clone.end()), clone.end());
+    std::unordered_map<T, T> cmap;
+    for (int i = 0; i < clone.size(); i++) {
+      cmap[clone[i]] = i;
+    }
+    clone.resize(n);
+    for (int i = 0; i < n; i++)
+      clone[i] = cmap[get(i)];
+    return SuffixArray(clone.begin(), clone.end());
+  }
+
   vector<id_type> buckets(max_c + 2);
   auto incr_cnt_c = [&](int i) {
     buckets[i+1]++;
