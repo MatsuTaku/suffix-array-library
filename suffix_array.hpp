@@ -199,6 +199,40 @@ vector<id_type> SuffixArray(const char* t) {
   return SuffixArray(std::string_view(t));
 }
 
+
+vector<id_type> Psi(const vector<id_type>& sa) {
+  int n = sa.size();
+  vector<id_type> isa(n);
+  for (int i = 0; i < n; i++) {
+    isa[sa[i]] = i;
+  }
+  vector<id_type> psi(n);
+  for (int i = 0; i < n; i++) {
+    int nxt = sa[i] + 1;
+    if (nxt == n)
+      nxt = 0;
+    psi[i] = isa[nxt];
+  }
+  return psi;
+}
+
+
+vector<id_type> FMIndex(const vector<id_type>& sa) {
+  int n = sa.size();
+  vector<id_type> isa(n);
+  for (int i = 0; i < n; i++) {
+    isa[sa[i]] = i;
+  }
+  vector<id_type> psi(n);
+  for (int i = 0; i < n; i++) {
+    int prev = sa[i] - 1;
+    if (prev < 0)
+      prev = n-1;
+    psi[i] = isa[prev];
+  }
+  return psi;
+}
+
 }
 
 #endif // SUFFIX_ARRAY_LIB_SUFFIX_ARRAY_HPP
